@@ -5,6 +5,19 @@
  */
 package com.pwrlab.jvmjs;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 /**
  *
  * @author Olaf
@@ -14,8 +27,21 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
+    
+    private ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+    private List<String> files = null; 
     public MainWindow() {
+        files = getJSFiles();
+        
         initComponents();
+        
+        try {
+            engine.eval(new FileReader("moralizator.js"));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ScriptException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -27,22 +53,126 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("TextConverterJS");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(files.toArray(new String[files.size()])));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jTextArea2.setEditable(false);
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane2.setViewportView(jTextArea2);
+
+        jButton1.setText("Formatuj");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Input");
+
+        jLabel2.setText("Output");
+
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 238, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jLabel1))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jComboBox1, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)))
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel2)
+                            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 238, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 84, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(layout.createSequentialGroup()
+                        .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jButton1)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jLabel2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 86, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        jTextArea2.setText("");
+        Invocable invocable = (Invocable) engine;
+
+        Object result = null;
+        try {
+            result = invocable.invokeFunction("process", jTextArea1.getText());
+        } catch (ScriptException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTextArea2.setText(result.toString());
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        String converterName = (String)jComboBox1.getSelectedItem();
+        try {
+            engine.eval(new FileReader(converterName));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ScriptException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+    
+    public List<String> getJSFiles(){
+        File dir = new File(".");
+        File [] files = dir.listFiles((File dir1, String name1) -> name1.endsWith(".js"));
+        LinkedList<String> result = new LinkedList<String>();
+        for(int i=0; i < files.length; i++){
+            result.push(files[i].getName());
+        }
+        
+        return result;
+    }
     /**
      * @param args the command line arguments
      */
@@ -79,5 +209,13 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
 }
