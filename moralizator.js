@@ -1,4 +1,4 @@
-var zakazane_slowa = ["niedostateczny", "vhdl", "hummus"]
+var zakazane_slowa = ["vim", "deficyt", "hummus"]
 
 function process(input){
     var temp = input;
